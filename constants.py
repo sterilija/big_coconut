@@ -4,5 +4,3 @@ DEFAULT_HEADERS = {
 }
 
 BASE_URL = "https://api.dev-cinescope.coconutqa.ru/"
-
-MOVIES_ENDPOINT = "/movies"
