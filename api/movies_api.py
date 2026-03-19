@@ -1,6 +1,6 @@
 from requester.requester import CustomRequester
 from models.model import CreateMovieDto, FindMoviesQuery
-from constants import MOVIES_ENDPOINT
+from api.constants import MOVIES_ENDPOINT
 
 class MoviesAPI(CustomRequester):
     def __init__(self, session, base_url, headers):
