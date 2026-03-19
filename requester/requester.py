@@ -4,7 +4,7 @@ import os
 import logging
 
 class CustomRequester:
-    def __init__(self, session: requests.Session, headers: dict, base_url):
+    def __init__(self, session: requests.Session, headers: dict, base_url: str):
         self.session = session
         self.headers = headers
         self.base_url = base_url
