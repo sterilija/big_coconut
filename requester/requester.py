@@ -11,12 +11,21 @@ class CustomRequester:
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
 
-    def send_request(self, method, endpoint, headers=None, expect_status=200, data_json=None, need_logging=True):
+    def send_request(self,
+                     method,
+                     endpoint,
+                     headers=None,
+                     expect_status=200,
+                     data_json=None,
+                     need_logging=True,
+                     query=None
+                     ):
         response = self.session.request(
             method=method,
             url=f"{self.base_url}/{endpoint}",
             json=data_json,
-            headers=headers
+            headers=headers,
+            params=query
         )
         assert response.status_code == expect_status,\
             f"Unexpected HTTP status code {response.status_code}, expected {expect_status}"
