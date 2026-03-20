@@ -30,20 +30,20 @@ class MoviesAPI(CustomRequester):
         return self.send_request(
             method="GET",
             expect_status=expected_status,
-            endpoint=f"{self.base_url}/{MOVIES_ENDPOINT}/{movie_id}",
+            endpoint=f"{MOVIES_ENDPOINT}/{movie_id}",
         )
 
     def delete_movie(self, movie_id, expect_status=200):
         return self.send_request(
             method="DELETE",
             expect_status=expect_status,
-            endpoint=f"{self.base_url}/{MOVIES_ENDPOINT}/{movie_id}",
+            endpoint=f"{MOVIES_ENDPOINT}/{movie_id}",
         )
 
     def edit_movie(self, movie_id, new_data_json: CreateMovieDto):
         return self.send_request(
             method="PATCH",
             expect_status=200,
-            endpoint=f"{self.base_url}/{MOVIES_ENDPOINT}/{movie_id}",
+            endpoint=f"{MOVIES_ENDPOINT}/{movie_id}",
             data_json=new_data_json
         )
