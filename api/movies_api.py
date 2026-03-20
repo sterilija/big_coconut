@@ -14,7 +14,7 @@ class MoviesAPI(CustomRequester):
         return self.send_request(
             method="POST",
             expect_status=201,
-            endpoint= f"{self.base_url}/{MOVIES_ENDPOINT}",
+            endpoint=MOVIES_ENDPOINT,
             data_json=data_json,
         )
 
@@ -22,21 +22,21 @@ class MoviesAPI(CustomRequester):
         return self.send_request(
             method="GET",
             expect_status=200,
-            endpoint=f"{self.base_url}/{MOVIES_ENDPOINT}",
+            endpoint=MOVIES_ENDPOINT,
             query=query
         )
 
-    def get_movie(self, movie_id):
+    def get_movie(self, movie_id, expected_status=200):
         return self.send_request(
             method="GET",
-            expect_status=200,
+            expect_status=expected_status,
             endpoint=f"{self.base_url}/{MOVIES_ENDPOINT}/{movie_id}",
         )
 
-    def delete_movie(self, movie_id):
+    def delete_movie(self, movie_id, expect_status=200):
         return self.send_request(
             method="DELETE",
-            expect_status=200,
+            expect_status=expect_status,
             endpoint=f"{self.base_url}/{MOVIES_ENDPOINT}/{movie_id}",
         )
 

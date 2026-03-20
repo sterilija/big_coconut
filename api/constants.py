@@ -1,3 +1,3 @@
-MOVIES_ENDPOINT = '/movies'
-LOGIN_ENDPOINT = '/movies'
-REGISTER_ENDPOINT = '/movies'
+MOVIES_ENDPOINT = 'movies'
+LOGIN_ENDPOINT = 'login'
+REGISTER_ENDPOINT = 'register'
