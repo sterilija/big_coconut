@@ -10,10 +10,10 @@ class MoviesAPI(CustomRequester):
             headers=headers
         )
 
-    def create_movie(self, data_json: CreateMovieDto):
+    def create_movie(self, data_json: CreateMovieDto, expect_status=201):
         return self.send_request(
             method="POST",
-            expect_status=201,
+            expect_status=expect_status,
             endpoint=MOVIES_ENDPOINT,
             data_json=data_json,
         )

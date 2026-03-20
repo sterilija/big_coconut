@@ -11,15 +11,6 @@ def session_new():
     session.close()
 
 @pytest.fixture(scope="session")
-def api_manager(session_new):
-    return ApiManager(
-        session=session_new,
-        headers=DEFAULT_HEADERS,
-        api_url=API_URL,
-        auth_url=AUTH_URL
-    )
-
-@pytest.fixture(scope="session")
 def api_manager_su(session_new):
     api_manager = ApiManager(
         session=session_new,
