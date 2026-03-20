@@ -23,3 +23,7 @@ class AuthAPI(CustomRequester):
             expect_status=expect_status
         )
         self._update_session_headers()
+        access_token = response.json().get('accessToken')
+        if access_token:
+            self._update_session_headers(Authorization=f"Bearer {access_token}")
+        return response
