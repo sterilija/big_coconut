@@ -30,6 +30,7 @@ class CustomRequester:
         assert response.status_code == expect_status,\
             f"Unexpected HTTP status code {response.status_code}, expected {expect_status}"
         if need_logging: self.log_request_and_response(response)
+        return  response
 
     def log_request_and_response(self, response):
         try:
@@ -78,3 +79,6 @@ class CustomRequester:
     def _update_session_headers(self, **kwargs):
         self.headers.update(kwargs)
         self.session.headers.update(self.headers)
+
+    def get_session(self):
+        return self.session

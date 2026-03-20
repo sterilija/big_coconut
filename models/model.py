@@ -15,8 +15,12 @@ class Location(Enum):
     SPB = 'SPB'
 
 class SortOrder(Enum):
-    ASC = "asc"
+    ASC = "ASC"
     DESC = "DESC"
+
+class Roles(Enum):
+    USER = "USER"
+    ADMIN = "ADMIN"
 
 class MovieResponse(BaseModel):
     id: float = Field(..., examples=[2])
@@ -82,6 +86,17 @@ class CreateMovieDto(BaseModel):
     published: bool
     genreId: float
 
+class AuthSuccessResponse(BaseModel):
+    user: UserData
+    accessToken: str
+    refreshToken: str
+    expiresIn: int
+
+class UserData(BaseModel):
+    id: str
+    email: str
+    fullName: str
+    roles: Roles
 
 class EditMovieDto(BaseModel):
     name: str | None = 'Movie name'
