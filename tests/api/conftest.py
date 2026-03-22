@@ -2,6 +2,7 @@ import pytest
 import requests
 from constants import DEFAULT_HEADERS, API_URL, AUTH_URL, AUTH_SU_CREDENTIALS
 from api.api_manager import ApiManager
+from tools.data_generator import DataGenerator
 
 
 @pytest.fixture(scope="session")
@@ -23,3 +24,10 @@ def api_manager_su(session_new):
         "password": "asdqwe123Q",
     })
     return api_manager
+
+@pytest.fixture(scope="session")
+def create_movie(api_manager_su):
+    new_movie = DataGenerator.new_movie()
+    response = api_manager_su.movies_api.create_movie(new_movie)
+    movie_created = response.json()
+    return movie_created
