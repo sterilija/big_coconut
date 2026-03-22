@@ -18,10 +18,10 @@ class MoviesAPI(CustomRequester):
             data_json=data_json,
         )
 
-    def get_movies_list(self, query: FindMoviesQuery):
+    def get_movies_list(self, query, expect_status=200):
         return self.send_request(
             method="GET",
-            expect_status=200,
+            expect_status=expect_status,
             endpoint=MOVIES_ENDPOINT,
             query=query
         )
@@ -40,10 +40,10 @@ class MoviesAPI(CustomRequester):
             endpoint=f"{MOVIES_ENDPOINT}/{movie_id}",
         )
 
-    def edit_movie(self, movie_id, new_data_json: CreateMovieDto):
+    def edit_movie(self, movie_id, new_data_json: CreateMovieDto, expect_status=200):
         return self.send_request(
             method="PATCH",
-            expect_status=200,
+            expect_status=expect_status,
             endpoint=f"{MOVIES_ENDPOINT}/{movie_id}",
             data_json=new_data_json
         )
