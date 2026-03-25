@@ -2,9 +2,10 @@ import pytest
 
 from tools.data_generator import DataGenerator
 
+
 class TestNegativeGet:
 
-    @pytest.mark.xfail ##TODO для разрабов: Починить ответ 500, который приходит вместо 404 (баг)
+    @pytest.mark.xfail  ##TODO для разрабов: Починить ответ 500, который приходит вместо 404 (баг)
     def test_get_wrong_id(self, api_manager_su):
         movie_id = DataGenerator.too_big_number()
         api_manager_su.movies_api.get_movie(
@@ -12,7 +13,7 @@ class TestNegativeGet:
             expected_status=404
         )
 
-    def test_get_corner_ids(self, api_manager_su):
+    def test_get_negative_boundary_ids(self, api_manager_su):
         api_manager_su.movies_api.get_movie(
             movie_id=0,
             expected_status=404
@@ -33,7 +34,7 @@ class TestNegativeGet:
             expected_status=404
         )
 
-    def test_get_list_movies_wrong_query(self, api_manager_su):
+    def test_get_list_wrong_query_type(self, api_manager_su):
         api_manager_su.movies_api.get_movies_list(
             query={
                 "lunch": "pizza",
@@ -47,15 +48,55 @@ class TestNegativeGet:
             expect_status=400
         )
 
-    def test_get_list_movies_query_corner_nums(self, api_manager_su):
-        #Сначала нули
+    def test_get_list_wrong_pagination(self, api_manager_su, faker_fxtr):
         api_manager_su.movies_api.get_movies_list(
             query={
                 "pageSize": 0,
-                "page": 0,
-                "minPrice": 0,
-                "maxPrice": 0,
+                "page": 1
             },
             expect_status=400
         )
-        #
+
+        api_manager_su.movies_api.get_movies_list(
+            query={
+                "pageSize": -1,
+                "page": -1
+            },
+            expect_status=400
+        )
+
+        api_manager_su.movies_api.get_movies_list(
+            query={
+                "pageSize": faker_fxtr.random_int(min=21),
+                "page": faker_fxtr.random_int(min=1, max=30)
+            },
+            expect_status=400
+        )
+
+    def test_get_list_wrong_price(self, api_manager_su, faker_fxtr):
+        api_manager_su.movies_api.get_movies_list(query={
+            "minPrice": faker_fxtr.random_int(min=531, max=1000000),
+            "maxPrice": faker_fxtr.random_int(min=1, max=531)
+        },
+            expect_status=400
+        )
+
+        api_manager_su.movies_api.get_movies_list(query={
+            "maxPrice": 2147483649
+        },
+            expect_status=400
+        )
+
+        api_manager_su.movies_api.get_movies_list(query={
+            "minPrice": 0,
+            "maxPrice": 0
+        },
+            expect_status=400
+        )
+    @pytest.mark.xfail #TODO BUG: Нет реакции на поле locations
+    def test_get_list_wrong_locations(self, api_manager_su, faker_fxtr):
+        api_manager_su.movies_api.get_movies_list(query={
+            "locations": ["NYC", "BKK"]
+        },
+            expect_status=400
+        )

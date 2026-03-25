@@ -8,3 +8,8 @@ class TestNegativeDelete:
             movie_id=movie_id,
             expect_status=404
         )
+
+    def test_delete_twice(self, api_manager_su, create_movie):
+        movie_id = create_movie.get("id")
+        api_manager_su.movies_api.delete_movie(movie_id)
+        api_manager_su.movies_api.delete_movie(movie_id, expect_status=404)

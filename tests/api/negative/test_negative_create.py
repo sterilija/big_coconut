@@ -1,3 +1,5 @@
+import pytest
+
 from tools.data_generator import DataGenerator
 
 class TestNegativeEdit:
@@ -19,3 +21,38 @@ class TestNegativeEdit:
             "location": {"loc": "OG Loc"},
         }
         api_manager_su.movies_api.create_movie(new_movie_json, expect_status=400)
+
+    def test_create_noauth(self, api_manager_noauth):
+        new_movie = DataGenerator.new_movie()
+        api_manager_noauth.movies_api.create_movie(
+            data_json=new_movie,
+            expect_status=401
+        )
+
+    def test_create_missing_name(self, api_manager_su):
+        new_movie = DataGenerator.new_movie()
+        new_movie.pop("name")
+        api_manager_su.movies_api.create_movie(
+            data_json=new_movie,
+            expect_status=400
+        )
+
+    @pytest.mark.xfail #TODO разрабам: Сделать запрет или экранирование XSS-атак
+    def test_create_xss(self, api_manager_su):
+        new_movie = DataGenerator.new_movie(
+            name="<script>alert(1)</script>",
+        )
+        api_manager_su.movies_api.create_movie(
+            data_json=new_movie,
+            expect_status=400
+        )
+
+    @pytest.mark.xfail # TODO разрабам: Сделать запрет или экранирование SQL_injection-атак
+    def test_create_sqli(self, api_manager_su):
+        new_movie = DataGenerator.new_movie(
+            name= "' OR 1=1",
+        )
+        api_manager_su.movies_api.create_movie(
+            data_json=new_movie,
+            expect_status=400
+        )
