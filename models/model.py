@@ -92,6 +92,11 @@ class CreateMovieDto(BaseModel):
     genreId: float
 
 
+class AuthPayload(BaseModel):
+    email: str
+    password: str
+
+
 class AuthSuccessResponse(BaseModel):
     user: UserData
     accessToken: str
@@ -104,6 +109,12 @@ class UserData(BaseModel):
     email: str
     fullName: str
     roles: Roles
+
+
+class UserRegisterData(BaseModel):
+    email: str
+    password: str
+    fullName: str
 
 
 class EditMovieDto(BaseModel):

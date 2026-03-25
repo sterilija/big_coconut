@@ -1,5 +1,6 @@
 from tools.is_sorted_by_created_at import is_sorted_by_created_at
 import math
+from models.http_status_codes import HTTPStatusCodes
 
 class TestPositiveGet:
 
@@ -38,12 +39,12 @@ class TestPositiveGet:
         api_manager_su.movies_api.get_movies_list({
             'page': 1,
             'pageSize': 1
-        }, expect_status=200)
+        }, expect_status=HTTPStatusCodes.Success)
 
         api_manager_su.movies_api.get_movies_list({
             'page': faker_fxtr.random_int(max=20, min=1),
             'pageSize': 20
-        }, expect_status=200)
+        }, expect_status=HTTPStatusCodes.Success)
 
     def test_get_movies_list_sort(self, api_manager_su):
         response = api_manager_su.movies_api.get_movies_list({

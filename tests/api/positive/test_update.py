@@ -1,5 +1,4 @@
 from tools.dict_compare_similar_fields import dict_compare_similar_fields
-from tools.pick_random_fields import pick_random_fields
 from tools.data_generator import DataGenerator
 
 
@@ -19,10 +18,12 @@ class TestPositiveUpdate:
         dict_compare_similar_fields(new_movie_json, response_movie)
         dict_compare_similar_fields(new_movie_json, get_movie)
 
-    def test_update_patrial(self, create_movie, api_manager_su):
+    def test_update_patrial(self, create_movie, api_manager_su, faker_fxtr):
         movie_id = create_movie.get("id")
-        new_json_partial = DataGenerator.new_movie()
-        new_json_partial = pick_random_fields(new_json_partial)
+        new_json_partial = {
+            "name": faker_fxtr.first_name(),
+            "description": faker_fxtr.text(max_nb_chars=100)
+        }
         response = api_manager_su.movies_api.edit_movie(
             movie_id=movie_id,
             new_data_json=new_json_partial,

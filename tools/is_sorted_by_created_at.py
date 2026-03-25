@@ -1,6 +1,9 @@
 from datetime import datetime
 
-def is_sorted_by_created_at(items, asc=True):
+from models.model import MovieResponse
+
+
+def is_sorted_by_created_at(items: list[MovieResponse], asc=True):
     """
     Проверяет, отсортирован ли список по createdAt.
 
