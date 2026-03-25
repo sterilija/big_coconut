@@ -1,9 +1,9 @@
 from faker import Faker
-
+import  math
 fake = Faker()
 
 def test_get_movies_list_no_query(api_manager_su):
-    api_manager_su.movies_api.get_movies_list()
+    api_manager_su.movies_api.get_movies_list(query={})
 
 def test_get_movies_list(api_manager_su):
     #pagination check
@@ -14,7 +14,7 @@ def test_get_movies_list(api_manager_su):
         'pageSize': page_size
     })
     current_page = response.json()
-    expect_page_count = current_page.get("count") / current_page.get("pageSize")
+    expect_page_count = math.ceil(current_page.get("count") / current_page.get("pageSize"))
     #   Проверяем что вернуло правильное кол-во страниц по формуле
     assert current_page.get("page") == page_n, \
         f"vagination page is{current_page.get('page')}, expected {page_n}"
