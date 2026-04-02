@@ -1,13 +1,13 @@
-import requests
+from requests import Session
 import json
 import os
 import logging
 
-from models.http_status_codes import HTTPStatusCodes
+from http import HTTPStatus
 
 
 class CustomRequester:
-    def __init__(self, session: requests.Session, headers: dict[str, str], base_url: str):
+    def __init__(self, session: Session, headers: dict[str, str], base_url: str):
         self.session = session
         self.headers = headers
         self.base_url = base_url
@@ -18,7 +18,7 @@ class CustomRequester:
                      method,
                      endpoint,
                      headers=None,
-                     expect_status=HTTPStatusCodes.Success,
+                     expected_status=HTTPStatus.OK,
                      data_json=None,
                      need_logging=True,
                      query=None
@@ -30,8 +30,8 @@ class CustomRequester:
             headers=headers,
             params=query
         )
-        assert response.status_code == expect_status,\
-            f"Unexpected HTTP status code {response.status_code}, expected {expect_status}"
+        assert response.status_code == expected_status,\
+            f"Unexpected HTTP status code {response.status_code}, expected {expected_status}"
         if need_logging: self.log_request_and_response(response)
         return  response
 
