@@ -1,32 +1,37 @@
-import requests
-from models.http_status_codes import HTTPStatusCodes
-from api.constants import REGISTER_ENDPOINT, LOGIN_ENDPOINT
+from requests import HTTPError
+from http import HTTPStatus
 from requester.requester import CustomRequester
 from models.model import AuthPayload, UserRegisterData
 
 
 class AuthAPI(CustomRequester):
+
     def __init__(self, session, base_url, headers):
         super().__init__(session=session, base_url=base_url, headers=headers)
+        self._login_endpoint = "login"
+        self._register_endpoint = 'register'
 
-    def register_user(self, user_json: UserRegisterData, expect_status=HTTPStatusCodes.Created):
+    def register_user(self, user_json: UserRegisterData, expected_status=HTTPStatus.CREATED):
         return self.send_request(
             method="POST",
-            endpoint=REGISTER_ENDPOINT,
+            endpoint=self._register_endpoint,
             data_json=user_json,
-            expect_status=expect_status
+            expected_status=expected_status
         )
 
-    def login_user(self, login_json: AuthPayload, expect_status=HTTPStatusCodes.Success):
+    def login_user(self, login_json: AuthPayload, expected_status=HTTPStatus.OK):
         response = self.send_request(
             method='POST',
-            endpoint=LOGIN_ENDPOINT,
+            endpoint=self._login_endpoint,
             data_json=login_json,
-            expect_status=expect_status
+            expected_status=expected_status
         )
         self._update_session_headers()
         access_token = response.json().get('accessToken')
-        if access_token:
-            self._update_session_headers(Authorization=f"Bearer {access_token}")
-        else: raise requests.HTTPError("Auth ручка не вернула токен")
+
+        if not access_token:
+            raise HTTPError("Auth ручка не вернула токен")
+
+        self._update_session_headers(Authorization=f"Bearer {access_token}")
+
         return response

@@ -1,35 +1,39 @@
 from tools.data_generator import DataGenerator
-from models.http_status_codes import HTTPStatusCodes
+from http import HTTPStatus
+
 class TestNegativeEdit:
 
-    def test_edit_wrong_id(self, api_manager_su):
+    def test_edit_movie_wrong_id(self, api_manager_su):
         fake_id = DataGenerator.too_big_number()
         new_json = DataGenerator.new_movie()
+
         api_manager_su.movies_api.edit_movie(
             movie_id=fake_id,
             new_data_json=new_json,
-            expect_status=HTTPStatusCodes.NotFound
+            expected_status=HTTPStatus.NOT_FOUND
         )
 
-    def test_edit_wrong_params(self, api_manager_su, create_movie):
+    def test_edit_movie_wrong_params(self, api_manager_su, create_movie):
         new_json = {
             "name": [],
             "is_published": "cheese",
             "genre_id": False,
             "location": {"loc": "OG Loc"},
-            "mr.penis": "friend" #TODO задокументировать что лишние строки API игнорирует
+            "mr.penis": "friend" #TODO для аналитиков: задокументировать что лишние строки API игнорирует
         }
-        movie_id = create_movie.get("id")
+        movie_id = create_movie.response.get("id")
+
         api_manager_su.movies_api.edit_movie(
             movie_id=movie_id,
             new_data_json=new_json,
-            expect_status=HTTPStatusCodes.WrongData
+            expected_status=HTTPStatus.BAD_REQUEST
         )
 
-    def test_edit_noauth(self, api_manager_noauth, create_movie):
-        movie_id = create_movie.get("id")
+    def test_edit_movie_noauth(self, api_manager_noauth, create_movie):
+        movie_id = create_movie.response.get("id")
+
         api_manager_noauth.movies_api.edit_movie(
             movie_id=movie_id,
             new_data_json=DataGenerator.new_movie(),
-            expect_status=HTTPStatusCodes.Unauthorized
+            expected_status=HTTPStatus.UNAUTHORIZED
         )
